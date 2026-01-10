@@ -1,0 +1,97 @@
+{
+  "name": "SchedLume - Class Schedule Viewer",
+  "short_name": "SchedLume",
+  "description": "A mobile-first, offline-capable class schedule viewer",
+  "start_url": "/today",
+  "display": "standalone",
+  "background_color": "#FFF5F2",
+  "theme_color": "#F97B5C",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "en",
+  "categories": ["education", "productivity"],
+  "icons": [
+    {
+      "src": "/icons/icon-72x72.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icons/icon-96x96.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icons/icon-128x128.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icons/icon-144x144.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icons/icon-152x152.png",
+      "sizes": "152x152",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icons/icon-384x384.png",
+      "sizes": "384x384",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable any"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshots/today-view.png",
+      "sizes": "750x1334",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Today's schedule view"
+    },
+    {
+      "src": "/screenshots/calendar-view.png",
+      "sizes": "750x1334",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Calendar month view"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Today's Classes",
+      "short_name": "Today",
+      "description": "View today's class schedule",
+      "url": "/today",
+      "icons": [{ "src": "/icons/shortcut-today.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "This Week",
+      "short_name": "Week",
+      "description": "View this week's schedule",
+      "url": "/week",
+      "icons": [{ "src": "/icons/shortcut-week.png", "sizes": "96x96" }]
+    }
+  ],
+  "prefer_related_applications": false,
+  "related_applications": []
+}

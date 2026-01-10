@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <rect width="512" height="512" fill="#F97B5C" rx="102"/>
+  <g transform="translate(96, 96)">
+    <!-- Book/Schedule icon -->
+    <path d="M160 0c-56 0-104 24-104 24v288s48-24 104-24 104 24 104 24V24s-48-24-104-24z" fill="white" fill-opacity="0.95"/>
+    <path d="M160 288c-56 0-104 24-104 24V24s48-24 104-24" stroke="white" stroke-width="10" fill="none"/>
+    <path d="M160 0c56 0 104 24 104 24v288s-48-24-104-24" stroke="white" stroke-width="10" fill="none"/>
+    <!-- Lines on book -->
+    <path d="M80 64h64M80 108h52M80 152h58M80 196h46" stroke="#F97B5C" stroke-width="10" stroke-linecap="round"/>
+    <path d="M240 64h-64M240 108h-52M240 152h-58M240 196h-46" stroke="#F97B5C" stroke-width="10" stroke-linecap="round"/>
+  </g>
+</svg>
