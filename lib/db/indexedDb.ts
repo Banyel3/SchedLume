@@ -2,7 +2,14 @@ import { DB_NAME, DB_VERSION, STORE_NAMES } from '../constants';
 
 let dbInstance: IDBDatabase | null = null;
 
+// Check if IndexedDB is available (client-side only)
+const isClient = typeof window !== 'undefined' && typeof indexedDB !== 'undefined';
+
 export async function initDB(): Promise<IDBDatabase> {
+  if (!isClient) {
+    throw new Error('IndexedDB is only available in the browser');
+  }
+  
   if (dbInstance) return dbInstance;
 
   return new Promise((resolve, reject) => {
