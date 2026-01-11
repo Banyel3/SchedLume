@@ -1,7 +1,7 @@
-import { ResolvedClass } from '@/types';
-import { getBaseSchedulesByWeekday } from '../db/scheduleStore';
-import { getOverridesByDate } from '../db/overrideStore';
-import { getNotesForDate } from '../db/noteStore';
+import { ResolvedClass } from "@/types";
+import { getBaseSchedulesByWeekday } from "../db/scheduleStore";
+import { getOverridesByDate } from "../db/overrideStore";
+import { getNotesForDate } from "../db/noteStore";
 
 /**
  * Generate a unique key for a class instance on a specific date
@@ -19,14 +19,16 @@ export function generateClassInstanceKey(
     return `${date}:${baseScheduleId}`;
   }
   // Fallback for edge cases
-  return `${date}:unknown:${overrideId || 'none'}`;
+  return `${date}:unknown:${overrideId || "none"}`;
 }
 
 /**
  * Get the fully resolved schedule for a specific date
  * Combines base weekly schedule with any date-specific overrides
  */
-export async function getScheduleForDate(date: string): Promise<ResolvedClass[]> {
+export async function getScheduleForDate(
+  date: string
+): Promise<ResolvedClass[]> {
   const dateObj = new Date(date);
   const weekday = dateObj.getDay();
 
@@ -46,9 +48,14 @@ export async function getScheduleForDate(date: string): Promise<ResolvedClass[]>
   // Process base schedules
   for (const base of baseSchedules) {
     const override = overrides.find((o) => o.baseScheduleId === base.id);
-    const instanceKey = generateClassInstanceKey(date, base.id, override?.id ?? null, false);
+    const instanceKey = generateClassInstanceKey(
+      date,
+      base.id,
+      override?.id ?? null,
+      false
+    );
 
-    if (override?.overrideType === 'cancel') {
+    if (override?.overrideType === "cancel") {
       // Canceled class - still show but marked as canceled
       resolved.push({
         instanceKey,
@@ -66,7 +73,7 @@ export async function getScheduleForDate(date: string): Promise<ResolvedClass[]>
         isAdded: false,
         hasNote: noteKeys.has(instanceKey),
       });
-    } else if (override?.overrideType === 'edit') {
+    } else if (override?.overrideType === "edit") {
       // Edited class - use override values
       resolved.push({
         instanceKey,
@@ -106,7 +113,7 @@ export async function getScheduleForDate(date: string): Promise<ResolvedClass[]>
   }
 
   // Add "add" type overrides (one-off classes)
-  const addOverrides = overrides.filter((o) => o.overrideType === 'add');
+  const addOverrides = overrides.filter((o) => o.overrideType === "add");
   for (const add of addOverrides) {
     const instanceKey = generateClassInstanceKey(date, null, add.id, true);
     resolved.push({

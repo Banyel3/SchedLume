@@ -1,7 +1,12 @@
-import { v4 as uuidv4 } from 'uuid';
-import { SubjectSchedule, CSVRawRow, CSVValidationError, SUBJECT_COLORS } from '@/types';
-import { DAY_MAP } from '../constants';
-import { mapHeaders, getMappedValue } from './headerMapper';
+import { v4 as uuidv4 } from "uuid";
+import {
+  SubjectSchedule,
+  CSVRawRow,
+  CSVValidationError,
+  SUBJECT_COLORS,
+} from "@/types";
+import { DAY_MAP } from "../constants";
+import { mapHeaders, getMappedValue } from "./headerMapper";
 
 export interface ValidationResult {
   isValid: boolean;
@@ -24,14 +29,16 @@ export function parseDay(value: string): number | null {
  */
 export function parseTime(value: string): string | null {
   const trimmed = value.trim();
-  
+
   // Try 24-hour format: HH:mm or H:mm
   const match24 = trimmed.match(/^(\d{1,2}):(\d{2})$/);
   if (match24) {
     const h = parseInt(match24[1]);
     const m = parseInt(match24[2]);
     if (h >= 0 && h <= 23 && m >= 0 && m <= 59) {
-      return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`;
+      return `${h.toString().padStart(2, "0")}:${m
+        .toString()
+        .padStart(2, "0")}`;
     }
   }
 
@@ -41,12 +48,14 @@ export function parseTime(value: string): string | null {
     let h = parseInt(match12[1]);
     const m = parseInt(match12[2]);
     const period = match12[3].toLowerCase();
-    
-    if (period === 'pm' && h < 12) h += 12;
-    if (period === 'am' && h === 12) h = 0;
-    
+
+    if (period === "pm" && h < 12) h += 12;
+    if (period === "am" && h === 12) h = 0;
+
     if (h >= 0 && h <= 23 && m >= 0 && m <= 59) {
-      return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`;
+      return `${h.toString().padStart(2, "0")}:${m
+        .toString()
+        .padStart(2, "0")}`;
     }
   }
 
@@ -55,32 +64,34 @@ export function parseTime(value: string): string | null {
 
 /**
  * Validate a color value
+ * Returns undefined if color is empty, invalid, or not provided
+ * This allows assignColors() to auto-assign colors later
  */
 function validateColor(color: string | undefined): string | undefined {
-  if (!color) return undefined;
-  
+  if (!color || color.trim() === "") return undefined;
+
   const trimmed = color.trim().toLowerCase();
-  
+
   // Check if it's a preset color name
   if (trimmed in SUBJECT_COLORS) {
     return SUBJECT_COLORS[trimmed as keyof typeof SUBJECT_COLORS];
   }
-  
+
   // Check if it's a valid hex color
   if (/^#[0-9a-f]{6}$/i.test(trimmed)) {
     return trimmed;
   }
-  
+
   // Check if it's a short hex color and expand it
   if (/^#[0-9a-f]{3}$/i.test(trimmed)) {
     const expanded = trimmed
       .slice(1)
-      .split('')
+      .split("")
       .map((c) => c + c)
-      .join('');
+      .join("");
     return `#${expanded}`;
   }
-  
+
   return undefined;
 }
 
@@ -88,7 +99,9 @@ function validateColor(color: string | undefined): string | undefined {
  * Assign colors to subjects that don't have one
  */
 function assignColors(schedules: SubjectSchedule[]): SubjectSchedule[] {
-  const colorKeys = Object.keys(SUBJECT_COLORS) as (keyof typeof SUBJECT_COLORS)[];
+  const colorKeys = Object.keys(
+    SUBJECT_COLORS
+  ) as (keyof typeof SUBJECT_COLORS)[];
   const subjectColors = new Map<string, string>();
   let colorIndex = 0;
 
@@ -99,7 +112,7 @@ function assignColors(schedules: SubjectSchedule[]): SubjectSchedule[] {
 
     // Check if we already assigned a color to this subject
     let color = subjectColors.get(schedule.subjectName);
-    
+
     if (!color) {
       // Assign a new color
       color = SUBJECT_COLORS[colorKeys[colorIndex % colorKeys.length]];
@@ -114,13 +127,16 @@ function assignColors(schedules: SubjectSchedule[]): SubjectSchedule[] {
 /**
  * Validate CSV rows and convert to SubjectSchedule objects
  */
-export function validateCSV(rows: CSVRawRow[], rawHeaders: string[]): ValidationResult {
+export function validateCSV(
+  rows: CSVRawRow[],
+  rawHeaders: string[]
+): ValidationResult {
   const errors: CSVValidationError[] = [];
   const schedules: SubjectSchedule[] = [];
   const headerMap = mapHeaders(rawHeaders);
 
   // Check required columns exist
-  const required = ['subject_name', 'day_of_week', 'start_time', 'end_time'];
+  const required = ["subject_name", "day_of_week", "start_time", "end_time"];
   for (const col of required) {
     if (!headerMap.has(col)) {
       errors.push({
@@ -139,20 +155,20 @@ export function validateCSV(rows: CSVRawRow[], rawHeaders: string[]): Validation
   rows.forEach((row, index) => {
     const rowNum = index + 2; // +2 for header and 1-indexing
 
-    const subjectName = getMappedValue(row, headerMap, 'subject_name');
-    const dayRaw = getMappedValue(row, headerMap, 'day_of_week');
-    const startRaw = getMappedValue(row, headerMap, 'start_time');
-    const endRaw = getMappedValue(row, headerMap, 'end_time');
-    const location = getMappedValue(row, headerMap, 'location');
-    const professor = getMappedValue(row, headerMap, 'professor');
-    const colorRaw = getMappedValue(row, headerMap, 'color');
+    const subjectName = getMappedValue(row, headerMap, "subject_name");
+    const dayRaw = getMappedValue(row, headerMap, "day_of_week");
+    const startRaw = getMappedValue(row, headerMap, "start_time");
+    const endRaw = getMappedValue(row, headerMap, "end_time");
+    const location = getMappedValue(row, headerMap, "location");
+    const professor = getMappedValue(row, headerMap, "professor");
+    const colorRaw = getMappedValue(row, headerMap, "color");
 
     // Validate subject name
     if (!subjectName) {
       errors.push({
         row: rowNum,
-        column: 'subject_name',
-        message: 'Subject name is required',
+        column: "subject_name",
+        message: "Subject name is required",
       });
       return;
     }
@@ -161,17 +177,17 @@ export function validateCSV(rows: CSVRawRow[], rawHeaders: string[]): Validation
     if (!dayRaw) {
       errors.push({
         row: rowNum,
-        column: 'day_of_week',
-        message: 'Day of week is required',
+        column: "day_of_week",
+        message: "Day of week is required",
       });
       return;
     }
-    
+
     const weekday = parseDay(dayRaw);
     if (weekday === null) {
       errors.push({
         row: rowNum,
-        column: 'day_of_week',
+        column: "day_of_week",
         message: `Invalid day: "${dayRaw}". Use Monday-Sunday, Mon-Sun, or 0-6.`,
       });
       return;
@@ -181,17 +197,17 @@ export function validateCSV(rows: CSVRawRow[], rawHeaders: string[]): Validation
     if (!startRaw) {
       errors.push({
         row: rowNum,
-        column: 'start_time',
-        message: 'Start time is required',
+        column: "start_time",
+        message: "Start time is required",
       });
       return;
     }
-    
+
     const startTime = parseTime(startRaw);
     if (!startTime) {
       errors.push({
         row: rowNum,
-        column: 'start_time',
+        column: "start_time",
         message: `Invalid time: "${startRaw}". Use HH:mm or H:mm AM/PM format.`,
       });
       return;
@@ -201,17 +217,17 @@ export function validateCSV(rows: CSVRawRow[], rawHeaders: string[]): Validation
     if (!endRaw) {
       errors.push({
         row: rowNum,
-        column: 'end_time',
-        message: 'End time is required',
+        column: "end_time",
+        message: "End time is required",
       });
       return;
     }
-    
+
     const endTime = parseTime(endRaw);
     if (!endTime) {
       errors.push({
         row: rowNum,
-        column: 'end_time',
+        column: "end_time",
         message: `Invalid time: "${endRaw}". Use HH:mm or H:mm AM/PM format.`,
       });
       return;
@@ -221,22 +237,28 @@ export function validateCSV(rows: CSVRawRow[], rawHeaders: string[]): Validation
     if (endTime <= startTime) {
       errors.push({
         row: rowNum,
-        column: 'end_time',
+        column: "end_time",
         message: `End time (${endTime}) must be after start time (${startTime})`,
       });
       return;
     }
 
     // Create schedule entry
+    // Note: professor and color are optional - if not provided, they default gracefully:
+    // - professor: undefined (won't show in UI)
+    // - color: undefined here, but assignColors() will auto-assign from preset palette
+    const professorValue = professor?.trim() || undefined;
+    const colorValue = validateColor(colorRaw);
+
     schedules.push({
       id: uuidv4(),
       subjectName,
       weekday,
       startTime,
       endTime,
-      location: location || undefined,
-      professor: professor || undefined,
-      color: validateColor(colorRaw),
+      location: location?.trim() || undefined,
+      professor: professorValue,
+      color: colorValue,
     });
   });
 

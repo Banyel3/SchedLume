@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
+import Link from "next/link";
 
 interface EmptyStateProps {
   title?: string;
@@ -9,15 +9,20 @@ interface EmptyStateProps {
 }
 
 export function EmptyState({
-  title = 'No classes',
-  description = 'There are no classes scheduled for this day.',
+  title = "No classes",
+  description = "There are no classes scheduled for this day.",
   showImportHint = true,
 }: EmptyStateProps) {
   return (
     <div className="flex flex-col items-center justify-center p-8 text-center">
       {/* Illustration */}
       <div className="w-24 h-24 mb-6 text-surface-300">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth={1.5}
+        >
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -27,7 +32,7 @@ export function EmptyState({
       </div>
 
       <h3 className="text-lg font-medium text-gray-900 mb-2">{title}</h3>
-      <p className="text-sm text-gray-500 max-w-xs">{description}</p>
+      <p className="text-sm text-gray-500 w-full">{description}</p>
 
       {showImportHint && (
         <Link

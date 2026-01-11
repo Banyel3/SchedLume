@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { useState, useEffect, useCallback } from 'react';
-import { AppSettings, DEFAULT_SETTINGS } from '@/types';
-import { getSettings, saveSettings } from '@/lib/db/settingsStore';
+import { useState, useEffect, useCallback } from "react";
+import { AppSettings, DEFAULT_SETTINGS } from "@/types";
+import { getSettings, saveSettings } from "@/lib/db/settingsStore";
 
 interface UseSettingsResult {
   settings: AppSettings;
@@ -24,7 +24,9 @@ export function useSettings(): UseSettingsResult {
       const data = await getSettings();
       setSettings(data);
     } catch (err) {
-      setError(err instanceof Error ? err : new Error('Failed to load settings'));
+      setError(
+        err instanceof Error ? err : new Error("Failed to load settings")
+      );
     } finally {
       setLoading(false);
     }
@@ -40,7 +42,9 @@ export function useSettings(): UseSettingsResult {
       const updated = await saveSettings(updates);
       setSettings(updated);
     } catch (err) {
-      setError(err instanceof Error ? err : new Error('Failed to save settings'));
+      setError(
+        err instanceof Error ? err : new Error("Failed to save settings")
+      );
       throw err;
     }
   }, []);

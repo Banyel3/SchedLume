@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { useNote } from '@/hooks';
-import { formatDateShort } from '@/lib/utils/date';
-import { formatTime } from '@/lib/utils/time';
-import { NOTE_MAX_LENGTH } from '@/lib/constants';
+import { useNote } from "@/hooks";
+import { formatDateShort } from "@/lib/utils/date";
+import { formatTime } from "@/lib/utils/time";
+import { NOTE_MAX_LENGTH } from "@/lib/constants";
 
 interface NoteEditorProps {
   date: string;
@@ -12,22 +12,37 @@ interface NoteEditorProps {
   startTime: string;
 }
 
-export function NoteEditor({ date, classInstanceKey, subjectName, startTime }: NoteEditorProps) {
-  const { noteText, setNoteText, lastSaved, saving } = useNote(date, classInstanceKey, subjectName, startTime);
+export function NoteEditor({
+  date,
+  classInstanceKey,
+  subjectName,
+  startTime,
+}: NoteEditorProps) {
+  const { noteText, setNoteText, lastSaved, saving } = useNote(
+    date,
+    classInstanceKey,
+    subjectName,
+    startTime
+  );
 
   const characterCount = noteText.length;
   const isNearLimit = characterCount > NOTE_MAX_LENGTH * 0.8;
   const isOverLimit = characterCount > NOTE_MAX_LENGTH;
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-4">
+      {/* Header with title and save indicator */}
       <div className="flex items-center justify-between">
         <h3 className="text-sm font-medium text-gray-700">
           Notes for {formatDateShort(date)}
         </h3>
         {saving && (
-          <span className="text-xs text-gray-400 flex items-center gap-1">
-            <svg className="w-3 h-3 animate-spin" fill="none" viewBox="0 0 24 24">
+          <span className="text-xs text-gray-400 flex items-center gap-1.5">
+            <svg
+              className="w-3.5 h-3.5 animate-spin"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
               <circle
                 className="opacity-25"
                 cx="12"
@@ -47,21 +62,31 @@ export function NoteEditor({ date, classInstanceKey, subjectName, startTime }: N
         )}
       </div>
 
+      {/* Textarea container */}
       <div className="relative">
         <textarea
           value={noteText}
           onChange={(e) => setNoteText(e.target.value)}
           placeholder="Add notes about what happened in this class..."
-          className={`w-full h-40 p-4 text-sm text-gray-700 bg-surface-100 border rounded-xl resize-none focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-transparent transition-all ${
-            isOverLimit ? 'border-red-400 focus:ring-red-400' : 'border-transparent'
-          }`}
+          className={`w-full min-h-40 p-4 text-base text-gray-700 leading-relaxed 
+            bg-surface-100 border rounded-xl resize-y
+            focus:outline-none focus:ring-2 focus:border-transparent transition-all
+            placeholder:text-gray-400 ${
+              isOverLimit
+                ? "border-red-400 focus:ring-red-400"
+                : "border-transparent focus:ring-primary-400"
+            }`}
         />
 
-        {/* Character count */}
-        <div className="absolute bottom-3 right-3 flex items-center gap-2">
+        {/* Character count - positioned in bottom right */}
+        <div className="absolute bottom-3 right-3 pointer-events-none">
           <span
-            className={`text-xs ${
-              isOverLimit ? 'text-red-500' : isNearLimit ? 'text-amber-500' : 'text-gray-400'
+            className={`text-xs font-medium px-2 py-0.5 rounded-full ${
+              isOverLimit
+                ? "text-red-600 bg-red-50"
+                : isNearLimit
+                ? "text-amber-600 bg-amber-50"
+                : "text-gray-400"
             }`}
           >
             {characterCount}/{NOTE_MAX_LENGTH}
@@ -71,8 +96,21 @@ export function NoteEditor({ date, classInstanceKey, subjectName, startTime }: N
 
       {/* Last saved timestamp */}
       {lastSaved && !saving && (
-        <p className="text-xs text-gray-400">
-          Last saved: {formatTime(new Date(lastSaved).toTimeString().slice(0, 5))}
+        <p className="text-xs text-gray-400 flex items-center gap-1.5">
+          <svg
+            className="w-3.5 h-3.5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M5 13l4 4L19 7"
+            />
+          </svg>
+          Saved at {formatTime(new Date(lastSaved).toTimeString().slice(0, 5))}
         </p>
       )}
     </div>

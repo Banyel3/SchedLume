@@ -1,4 +1,4 @@
-import { CSVRawRow } from '@/types';
+import { CSVRawRow } from "@/types";
 
 /**
  * Parse a CSV file into an array of row objects
@@ -15,7 +15,7 @@ export function parseCSVString(text: string): CSVRawRow[] {
   const lines = text.split(/\r?\n/).filter((line) => line.trim());
 
   if (lines.length < 2) {
-    throw new Error('CSV must have a header row and at least one data row');
+    throw new Error("CSV must have a header row and at least one data row");
   }
 
   const headers = parseCSVLine(lines[0]);
@@ -24,11 +24,11 @@ export function parseCSVString(text: string): CSVRawRow[] {
   for (let i = 1; i < lines.length; i++) {
     const values = parseCSVLine(lines[i]);
     const row: CSVRawRow = {};
-    
+
     headers.forEach((header, index) => {
-      row[header] = values[index] ?? '';
+      row[header] = values[index] ?? "";
     });
-    
+
     rows.push(row);
   }
 
@@ -40,7 +40,7 @@ export function parseCSVString(text: string): CSVRawRow[] {
  */
 function parseCSVLine(line: string): string[] {
   const result: string[] = [];
-  let current = '';
+  let current = "";
   let inQuotes = false;
 
   for (let i = 0; i < line.length; i++) {
@@ -56,14 +56,14 @@ function parseCSVLine(line: string): string[] {
         // Toggle quote mode
         inQuotes = !inQuotes;
       }
-    } else if (char === ',' && !inQuotes) {
+    } else if (char === "," && !inQuotes) {
       result.push(current.trim());
-      current = '';
+      current = "";
     } else {
       current += char;
     }
   }
-  
+
   // Push the last field
   result.push(current.trim());
 
@@ -76,10 +76,10 @@ function parseCSVLine(line: string): string[] {
 export async function getCSVHeaders(file: File): Promise<string[]> {
   const text = await file.text();
   const lines = text.split(/\r?\n/).filter((line) => line.trim());
-  
+
   if (lines.length === 0) {
-    throw new Error('CSV file is empty');
+    throw new Error("CSV file is empty");
   }
-  
+
   return parseCSVLine(lines[0]);
 }

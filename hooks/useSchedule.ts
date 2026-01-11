@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { useState, useEffect, useCallback } from 'react';
-import { ResolvedClass } from '@/types';
-import { getScheduleForDate } from '@/lib/schedule/resolver';
+import { useState, useEffect, useCallback } from "react";
+import { ResolvedClass } from "@/types";
+import { getScheduleForDate } from "@/lib/schedule/resolver";
 
 interface UseScheduleResult {
   schedule: ResolvedClass[];
@@ -23,7 +23,9 @@ export function useSchedule(date: string): UseScheduleResult {
       const data = await getScheduleForDate(date);
       setSchedule(data);
     } catch (err) {
-      setError(err instanceof Error ? err : new Error('Failed to load schedule'));
+      setError(
+        err instanceof Error ? err : new Error("Failed to load schedule")
+      );
     } finally {
       setLoading(false);
     }

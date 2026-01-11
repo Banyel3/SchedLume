@@ -1,22 +1,30 @@
-'use client';
+"use client";
 
-import { ResolvedClass } from '@/types';
-import { ClassCard } from './ClassCard';
-import { EmptyState } from './EmptyState';
+import { ResolvedClass } from "@/types";
+import { ClassCard } from "./ClassCard";
+import { EmptyState } from "./EmptyState";
 
 interface ClassListProps {
   classes: ResolvedClass[];
-  timeFormat?: '12h' | '24h';
+  timeFormat?: "12h" | "24h";
   onClassClick?: (classData: ResolvedClass) => void;
   loading?: boolean;
 }
 
-export function ClassList({ classes, timeFormat = '12h', onClassClick, loading }: ClassListProps) {
+export function ClassList({
+  classes,
+  timeFormat = "12h",
+  onClassClick,
+  loading,
+}: ClassListProps) {
   if (loading) {
     return (
-      <div className="space-y-3 p-4">
+      <div className="space-y-3">
         {[1, 2, 3].map((i) => (
-          <div key={i} className="animate-pulse bg-surface-200 rounded-2xl h-24" />
+          <div
+            key={i}
+            className="animate-pulse bg-surface-200 rounded-2xl h-24"
+          />
         ))}
       </div>
     );
@@ -31,7 +39,7 @@ export function ClassList({ classes, timeFormat = '12h', onClassClick, loading }
   const canceledClasses = classes.filter((c) => c.isCanceled);
 
   return (
-    <div className="p-4 space-y-3">
+    <div className="space-y-3">
       {/* Active classes */}
       {visibleClasses.map((classData) => (
         <ClassCard
@@ -48,7 +56,9 @@ export function ClassList({ classes, timeFormat = '12h', onClassClick, loading }
           {visibleClasses.length > 0 && (
             <div className="flex items-center gap-2 pt-4 pb-2">
               <div className="flex-1 h-px bg-surface-200" />
-              <span className="text-xs text-gray-400 uppercase">Canceled</span>
+              <span className="text-xs text-gray-400 uppercase tracking-wide">
+                Canceled
+              </span>
               <div className="flex-1 h-px bg-surface-200" />
             </div>
           )}

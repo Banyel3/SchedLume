@@ -36,10 +36,9 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
         <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
       </head>
-      <body className="antialiased">
-        <div className="min-h-screen pb-20">
-          {children}
-        </div>
+      <body className="antialiased w-full">
+        {/* Main content area with bottom padding for nav + safe area */}
+        <div className="min-h-screen w-full pb-24 pb-safe">{children}</div>
         <BottomNav />
         <ServiceWorkerRegistration />
       </body>

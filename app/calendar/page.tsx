@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import { useState, useCallback, useMemo } from 'react';
-import { useRouter } from 'next/navigation';
-import { useSelectedDate, useSettings, useDatesWithNotes } from '@/hooks';
-import { AppHeader } from '@/components/layout';
-import { CalendarGrid } from '@/components/calendar';
-import { Button } from '@/components/ui';
+import { useState, useCallback, useMemo, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useSelectedDate, useSettings, useDatesWithNotes } from "@/hooks";
+import { AppHeader } from "@/components/layout";
+import { CalendarGrid } from "@/components/calendar";
+import { Button } from "@/components/ui";
 import {
   getYearMonth,
   formatDateDisplay,
@@ -13,8 +13,8 @@ import {
   getLastDayOfMonth,
   getToday,
   isToday,
-} from '@/lib/utils/date';
-import { getDatesWithOverrides } from '@/lib/db/overrideStore';
+} from "@/lib/utils/date";
+import { getDatesWithOverrides } from "@/lib/db/overrideStore";
 
 export default function CalendarPage() {
   const router = useRouter();
@@ -36,12 +36,19 @@ export default function CalendarPage() {
   }, [viewDate.year, viewDate.month]);
 
   // Get dates with notes and overrides
-  const { datesWithNotes } = useDatesWithNotes(monthRange.start, monthRange.end);
-  const [datesWithOverrides, setDatesWithOverrides] = useState<Set<string>>(new Set());
+  const { datesWithNotes } = useDatesWithNotes(
+    monthRange.start,
+    monthRange.end
+  );
+  const [datesWithOverrides, setDatesWithOverrides] = useState<Set<string>>(
+    new Set()
+  );
 
   // Load overrides for the month
-  useMemo(() => {
-    getDatesWithOverrides(monthRange.start, monthRange.end).then(setDatesWithOverrides);
+  useEffect(() => {
+    getDatesWithOverrides(monthRange.start, monthRange.end).then(
+      setDatesWithOverrides
+    );
   }, [monthRange.start, monthRange.end]);
 
   const handleDateSelect = useCallback(
@@ -77,7 +84,7 @@ export default function CalendarPage() {
   }, [setSelectedDate]);
 
   const handleViewDay = useCallback(() => {
-    router.push('/today');
+    router.push("/today");
   }, [router]);
 
   return (
@@ -93,7 +100,7 @@ export default function CalendarPage() {
         }
       />
 
-      <main className="max-w-lg mx-auto">
+      <main className="w-full px-6 sm:px-8 py-5">
         <CalendarGrid
           year={viewDate.year}
           month={viewDate.month}
@@ -107,20 +114,22 @@ export default function CalendarPage() {
         />
 
         {/* Selected date info */}
-        <div className="p-4 bg-white border-t border-surface-200">
+        <div className="mt-4 p-5 bg-white rounded-2xl shadow-card">
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="font-medium text-gray-900">{formatDateDisplay(selectedDate)}</h3>
-              <div className="flex items-center gap-2 mt-1">
+              <h3 className="font-medium text-gray-900">
+                {formatDateDisplay(selectedDate)}
+              </h3>
+              <div className="flex items-center gap-4 mt-2">
                 {datesWithNotes.has(selectedDate) && (
-                  <span className="text-xs text-amber-600 flex items-center gap-1">
-                    <span className="w-2 h-2 rounded-full bg-amber-400" />
+                  <span className="text-xs text-amber-600 flex items-center gap-2">
+                    <span className="w-2.5 h-2.5 rounded-full bg-amber-400" />
                     Has notes
                   </span>
                 )}
                 {datesWithOverrides.has(selectedDate) && (
-                  <span className="text-xs text-blue-600 flex items-center gap-1">
-                    <span className="w-2 h-2 rounded-full bg-blue-400" />
+                  <span className="text-xs text-blue-600 flex items-center gap-2">
+                    <span className="w-2.5 h-2.5 rounded-full bg-blue-400" />
                     Has changes
                   </span>
                 )}
@@ -133,14 +142,14 @@ export default function CalendarPage() {
         </div>
 
         {/* Legend */}
-        <div className="p-4 text-xs text-gray-500">
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-1">
-              <span className="w-2 h-2 rounded-full bg-amber-400" />
+        <div className="px-1 py-5 text-sm text-gray-500">
+          <div className="flex items-center gap-8">
+            <div className="flex items-center gap-2">
+              <span className="w-2.5 h-2.5 rounded-full bg-amber-400" />
               <span>Notes</span>
             </div>
-            <div className="flex items-center gap-1">
-              <span className="w-2 h-2 rounded-full bg-blue-400" />
+            <div className="flex items-center gap-2">
+              <span className="w-2.5 h-2.5 rounded-full bg-blue-400" />
               <span>Schedule changes</span>
             </div>
           </div>

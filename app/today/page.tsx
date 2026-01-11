@@ -1,30 +1,39 @@
-'use client';
+"use client";
 
-import { useState, useCallback, useMemo } from 'react';
-import { useSelectedDate, useSchedule, useSettings, useSwipeNavigation, useDatesWithNotes } from '@/hooks';
-import { AppHeader, DateStrip } from '@/components/layout';
-import { ClassList, ClassDetail } from '@/components/schedule';
-import { DayOverrideForm } from '@/components/forms';
-import { Modal, Button } from '@/components/ui';
-import { ResolvedClass } from '@/types';
-import { formatDateDisplay, isToday, addDays } from '@/lib/utils/date';
+import { useState, useCallback, useMemo } from "react";
+import {
+  useSelectedDate,
+  useSchedule,
+  useSettings,
+  useSwipeNavigation,
+  useDatesWithNotes,
+} from "@/hooks";
+import { AppHeader, DateStrip } from "@/components/layout";
+import { ClassList, ClassDetail } from "@/components/schedule";
+import { DayOverrideForm } from "@/components/forms";
+import { Modal, Button } from "@/components/ui";
+import { ResolvedClass } from "@/types";
+import { formatDateDisplay, isToday, addDays } from "@/lib/utils/date";
 
 export default function TodayPage() {
-  const { selectedDate, setSelectedDate, goToPrevDay, goToNextDay } = useSelectedDate();
+  const { selectedDate, setSelectedDate, goToPrevDay, goToNextDay } =
+    useSelectedDate();
   const { schedule, loading, refresh } = useSchedule(selectedDate);
   const { settings } = useSettings();
-  
+
   // Get dates with notes for the date strip
   const dateRange = useMemo(() => {
     const start = addDays(selectedDate, -7);
     const end = addDays(selectedDate, 7);
     return { start, end };
   }, [selectedDate]);
-  
+
   const { datesWithNotes } = useDatesWithNotes(dateRange.start, dateRange.end);
 
   // Modal states
-  const [selectedClass, setSelectedClass] = useState<ResolvedClass | null>(null);
+  const [selectedClass, setSelectedClass] = useState<ResolvedClass | null>(
+    null
+  );
   const [showOverrideForm, setShowOverrideForm] = useState(false);
   const [editingClass, setEditingClass] = useState<ResolvedClass | null>(null);
 
@@ -58,13 +67,17 @@ export default function TodayPage() {
     refresh();
   }, [handleCloseOverrideForm, refresh]);
 
-  const title = isToday(selectedDate) ? "Today's Classes" : formatDateDisplay(selectedDate);
+  const title = isToday(selectedDate)
+    ? "Today's Classes"
+    : formatDateDisplay(selectedDate);
 
   return (
     <>
       <AppHeader
         title={title}
-        subtitle={isToday(selectedDate) ? formatDateDisplay(selectedDate) : undefined}
+        subtitle={
+          isToday(selectedDate) ? formatDateDisplay(selectedDate) : undefined
+        }
         rightAction={
           <Button
             variant="ghost"
@@ -72,8 +85,18 @@ export default function TodayPage() {
             onClick={() => handleOpenOverrideForm()}
             aria-label="Add class"
           >
-            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 4v16m8-8H4"
+              />
             </svg>
           </Button>
         }
@@ -85,7 +108,7 @@ export default function TodayPage() {
         datesWithNotes={datesWithNotes}
       />
 
-      <main className="max-w-lg mx-auto">
+      <main className="w-full px-6 sm:px-8 py-5">
         <ClassList
           classes={schedule}
           loading={loading}
@@ -95,11 +118,7 @@ export default function TodayPage() {
       </main>
 
       {/* Class Detail Modal */}
-      <Modal
-        isOpen={!!selectedClass}
-        onClose={handleCloseDetail}
-        title="Class"
-      >
+      <Modal isOpen={!!selectedClass} onClose={handleCloseDetail} title="Class">
         {selectedClass && (
           <ClassDetail
             classData={selectedClass}
@@ -112,7 +131,7 @@ export default function TodayPage() {
       <Modal
         isOpen={showOverrideForm}
         onClose={handleCloseOverrideForm}
-        title={editingClass ? 'Edit Class' : 'Add Class'}
+        title={editingClass ? "Edit Class" : "Add Class"}
       >
         <DayOverrideForm
           date={selectedDate}

@@ -1,28 +1,28 @@
 /// <reference lib="webworker" />
 
-const CACHE_NAME = 'schedlume-v1';
-const STATIC_CACHE = 'schedlume-static-v1';
-const DYNAMIC_CACHE = 'schedlume-dynamic-v1';
+const CACHE_NAME = "schedlume-v1";
+const STATIC_CACHE = "schedlume-static-v1";
+const DYNAMIC_CACHE = "schedlume-dynamic-v1";
 
 // Assets to cache on install
 const STATIC_ASSETS = [
-  '/',
-  '/today',
-  '/week',
-  '/calendar',
-  '/settings',
-  '/manifest.json',
-  '/icons/icon-192x192.png',
-  '/icons/icon-512x512.png',
+  "/",
+  "/today",
+  "/week",
+  "/calendar",
+  "/settings",
+  "/manifest.json",
+  "/icons/icon-192x192.png",
+  "/icons/icon-512x512.png",
 ];
 
 // Install event - cache static assets
-self.addEventListener('install', (event) => {
+self.addEventListener("install", (event) => {
   event.waitUntil(
     caches.open(STATIC_CACHE).then((cache) => {
-      console.log('[SW] Caching static assets');
+      console.log("[SW] Caching static assets");
       return cache.addAll(STATIC_ASSETS).catch((err) => {
-        console.warn('[SW] Some static assets failed to cache:', err);
+        console.warn("[SW] Some static assets failed to cache:", err);
       });
     })
   );
@@ -31,14 +31,14 @@ self.addEventListener('install', (event) => {
 });
 
 // Activate event - clean up old caches
-self.addEventListener('activate', (event) => {
+self.addEventListener("activate", (event) => {
   event.waitUntil(
     caches.keys().then((keys) => {
       return Promise.all(
         keys
           .filter((key) => key !== STATIC_CACHE && key !== DYNAMIC_CACHE)
           .map((key) => {
-            console.log('[SW] Removing old cache:', key);
+            console.log("[SW] Removing old cache:", key);
             return caches.delete(key);
           })
       );
@@ -49,17 +49,17 @@ self.addEventListener('activate', (event) => {
 });
 
 // Fetch event - serve from cache, falling back to network
-self.addEventListener('fetch', (event) => {
+self.addEventListener("fetch", (event) => {
   const { request } = event;
   const url = new URL(request.url);
 
   // Skip non-GET requests
-  if (request.method !== 'GET') {
+  if (request.method !== "GET") {
     return;
   }
 
   // Skip chrome-extension and other non-http(s) requests
-  if (!url.protocol.startsWith('http')) {
+  if (!url.protocol.startsWith("http")) {
     return;
   }
 
@@ -69,7 +69,7 @@ self.addEventListener('fetch', (event) => {
   }
 
   // For navigation requests (pages), use network-first strategy
-  if (request.mode === 'navigate') {
+  if (request.mode === "navigate") {
     event.respondWith(
       fetch(request)
         .then((response) => {
@@ -87,7 +87,7 @@ self.addEventListener('fetch', (event) => {
               return cachedResponse;
             }
             // Return offline fallback page
-            return caches.match('/');
+            return caches.match("/");
           });
         })
     );
@@ -96,10 +96,10 @@ self.addEventListener('fetch', (event) => {
 
   // For static assets, use cache-first strategy
   if (
-    request.destination === 'style' ||
-    request.destination === 'script' ||
-    request.destination === 'image' ||
-    request.destination === 'font'
+    request.destination === "style" ||
+    request.destination === "script" ||
+    request.destination === "image" ||
+    request.destination === "font"
   ) {
     event.respondWith(
       caches.match(request).then((cachedResponse) => {
@@ -141,15 +141,15 @@ self.addEventListener('fetch', (event) => {
 });
 
 // Handle messages from the main thread
-self.addEventListener('message', (event) => {
-  if (event.data === 'skipWaiting') {
+self.addEventListener("message", (event) => {
+  if (event.data === "skipWaiting") {
     self.skipWaiting();
   }
 });
 
 // Background sync for offline changes (future enhancement)
-self.addEventListener('sync', (event) => {
-  if (event.tag === 'sync-data') {
-    console.log('[SW] Background sync triggered');
+self.addEventListener("sync", (event) => {
+  if (event.tag === "sync-data") {
+    console.log("[SW] Background sync triggered");
   }
 });

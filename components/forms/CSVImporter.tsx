@@ -1,23 +1,29 @@
-'use client';
+"use client";
 
-import { useState, useCallback } from 'react';
-import { Button } from '@/components/ui';
-import { parseCSVFile, getCSVHeaders } from '@/lib/csv/parser';
-import { validateCSV } from '@/lib/csv/validator';
-import { replaceAllBaseSchedules } from '@/lib/db/scheduleStore';
-import { updateLastImport } from '@/lib/db/settingsStore';
-import { CSVValidationError } from '@/types';
+import { useState, useCallback } from "react";
+import { Button } from "@/components/ui";
+import { parseCSVFile, getCSVHeaders } from "@/lib/csv/parser";
+import { validateCSV } from "@/lib/csv/validator";
+import { replaceAllBaseSchedules } from "@/lib/db/scheduleStore";
+import { updateLastImport } from "@/lib/db/settingsStore";
+import { CSVValidationError } from "@/types";
 
 interface CSVImporterProps {
   onSuccess?: () => void;
   onError?: (errors: CSVValidationError[]) => void;
 }
 
-type ImportState = 'idle' | 'parsing' | 'validating' | 'importing' | 'success' | 'error';
+type ImportState =
+  | "idle"
+  | "parsing"
+  | "validating"
+  | "importing"
+  | "success"
+  | "error";
 
 export function CSVImporter({ onSuccess, onError }: CSVImporterProps) {
-  const [state, setState] = useState<ImportState>('idle');
-  const [fileName, setFileName] = useState<string>('');
+  const [state, setState] = useState<ImportState>("idle");
+  const [fileName, setFileName] = useState<string>("");
   const [errors, setErrors] = useState<CSVValidationError[]>([]);
   const [rowCount, setRowCount] = useState<number>(0);
 
@@ -31,54 +37,55 @@ export function CSVImporter({ onSuccess, onError }: CSVImporterProps) {
 
       try {
         // Parse CSV
-        setState('parsing');
+        setState("parsing");
         const rows = await parseCSVFile(file);
         const headers = await getCSVHeaders(file);
 
         // Validate
-        setState('validating');
+        setState("validating");
         const result = validateCSV(rows, headers);
 
         if (!result.isValid) {
-          setState('error');
+          setState("error");
           setErrors(result.errors);
           onError?.(result.errors);
           return;
         }
 
         // Import
-        setState('importing');
+        setState("importing");
         await replaceAllBaseSchedules(result.schedules);
         await updateLastImport(file.name);
 
         setRowCount(result.schedules.length);
-        setState('success');
+        setState("success");
         onSuccess?.();
       } catch (err) {
-        setState('error');
-        const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
-        setErrors([{ row: 0, column: 'file', message: errorMessage }]);
-        onError?.([{ row: 0, column: 'file', message: errorMessage }]);
+        setState("error");
+        const errorMessage =
+          err instanceof Error ? err.message : "Unknown error occurred";
+        setErrors([{ row: 0, column: "file", message: errorMessage }]);
+        onError?.([{ row: 0, column: "file", message: errorMessage }]);
       }
 
       // Reset file input
-      event.target.value = '';
+      event.target.value = "";
     },
     [onSuccess, onError]
   );
 
   const handleReset = () => {
-    setState('idle');
-    setFileName('');
+    setState("idle");
+    setFileName("");
     setErrors([]);
     setRowCount(0);
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-5">
       {/* File input */}
-      {state === 'idle' && (
-        <div className="border-2 border-dashed border-surface-300 rounded-xl p-6 text-center hover:border-primary-300 transition-colors">
+      {state === "idle" && (
+        <div className="border-2 border-dashed border-surface-300 rounded-xl p-8 text-center hover:border-primary-300 hover:bg-surface-50/50 transition-all cursor-pointer">
           <input
             type="file"
             accept=".csv,text/csv"
@@ -86,8 +93,8 @@ export function CSVImporter({ onSuccess, onError }: CSVImporterProps) {
             className="hidden"
             id="csv-upload"
           />
-          <label htmlFor="csv-upload" className="cursor-pointer">
-            <div className="w-12 h-12 mx-auto mb-4 text-gray-400">
+          <label htmlFor="csv-upload" className="cursor-pointer block">
+            <div className="w-14 h-14 mx-auto mb-4 text-gray-400">
               <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path
                   strokeLinecap="round"
@@ -97,16 +104,21 @@ export function CSVImporter({ onSuccess, onError }: CSVImporterProps) {
                 />
               </svg>
             </div>
-            <p className="text-sm font-medium text-gray-700">Click to select a CSV file</p>
-            <p className="text-xs text-gray-500 mt-1">
-              Supported columns: subject, day, start_time, end_time, location, professor, color
+            <p className="text-sm font-medium text-gray-700">
+              Click to select a CSV file
+            </p>
+            <p className="text-xs text-gray-500 mt-2 px-4">
+              Supported columns: subject, day, start_time, end_time, location,
+              professor, color
             </p>
           </label>
         </div>
       )}
 
       {/* Loading states */}
-      {(state === 'parsing' || state === 'validating' || state === 'importing') && (
+      {(state === "parsing" ||
+        state === "validating" ||
+        state === "importing") && (
         <div className="bg-surface-100 rounded-xl p-6 text-center">
           <div className="w-8 h-8 mx-auto mb-3 animate-spin text-primary-400">
             <svg fill="none" viewBox="0 0 24 24">
@@ -126,16 +138,16 @@ export function CSVImporter({ onSuccess, onError }: CSVImporterProps) {
             </svg>
           </div>
           <p className="text-sm text-gray-600">
-            {state === 'parsing' && 'Reading file...'}
-            {state === 'validating' && 'Validating data...'}
-            {state === 'importing' && 'Importing schedule...'}
+            {state === "parsing" && "Reading file..."}
+            {state === "validating" && "Validating data..."}
+            {state === "importing" && "Importing schedule..."}
           </p>
           <p className="text-xs text-gray-400 mt-1">{fileName}</p>
         </div>
       )}
 
       {/* Success state */}
-      {state === 'success' && (
+      {state === "success" && (
         <div className="bg-green-50 rounded-xl p-6 text-center">
           <div className="w-12 h-12 mx-auto mb-3 text-green-500">
             <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -147,21 +159,28 @@ export function CSVImporter({ onSuccess, onError }: CSVImporterProps) {
               />
             </svg>
           </div>
-          <p className="text-sm font-medium text-green-800">Import successful!</p>
+          <p className="text-sm font-medium text-green-800">
+            Import successful!
+          </p>
           <p className="text-xs text-green-600 mt-1">
             Imported {rowCount} classes from {fileName}
           </p>
-          <Button variant="secondary" size="sm" onClick={handleReset} className="mt-4">
+          <Button
+            variant="secondary"
+            size="sm"
+            onClick={handleReset}
+            className="mt-4"
+          >
             Import another file
           </Button>
         </div>
       )}
 
       {/* Error state */}
-      {state === 'error' && (
-        <div className="bg-red-50 rounded-xl p-6">
+      {state === "error" && (
+        <div className="bg-red-50 rounded-xl p-5">
           <div className="flex items-start gap-3">
-            <div className="w-6 h-6 text-red-500 flex-shrink-0">
+            <div className="w-6 h-6 text-red-500 shrink-0 mt-0.5">
               <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path
                   strokeLinecap="round"
@@ -171,43 +190,51 @@ export function CSVImporter({ onSuccess, onError }: CSVImporterProps) {
                 />
               </svg>
             </div>
-            <div className="flex-1">
-              <p className="text-sm font-medium text-red-800">Import failed</p>
-              <p className="text-xs text-red-600 mt-1">{fileName}</p>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-semibold text-red-800">
+                Import failed
+              </p>
+              <p className="text-xs text-red-600 mt-1 truncate">{fileName}</p>
 
               {/* Error list */}
               <div className="mt-3 space-y-2 max-h-48 overflow-y-auto">
                 {errors.slice(0, 10).map((error, index) => (
-                  <div key={index} className="text-xs text-red-700 bg-red-100 rounded px-2 py-1">
-                    {error.row > 0 ? `Row ${error.row}: ` : ''}
+                  <div
+                    key={index}
+                    className="text-xs text-red-700 bg-red-100/80 rounded-lg px-3 py-2"
+                  >
+                    {error.row > 0 && (
+                      <span className="font-medium">Row {error.row}: </span>
+                    )}
                     {error.message}
                   </div>
                 ))}
                 {errors.length > 10 && (
-                  <p className="text-xs text-red-600">... and {errors.length - 10} more errors</p>
+                  <p className="text-xs text-red-600 font-medium">
+                    ... and {errors.length - 10} more errors
+                  </p>
                 )}
               </div>
+
+              {/* Template hint */}
+              <p className="mt-4 text-xs text-red-600">
+                Tip: Download the CSV template from Settings to ensure your file
+                matches the expected format.
+              </p>
             </div>
           </div>
-          <Button variant="secondary" size="sm" onClick={handleReset} className="mt-4 w-full">
+          <Button
+            variant="secondary"
+            size="sm"
+            onClick={handleReset}
+            className="mt-4 w-full"
+          >
             Try again
           </Button>
         </div>
       )}
 
-      {/* CSV format hint */}
-      {state === 'idle' && (
-        <div className="text-xs text-gray-500 space-y-1">
-          <p className="font-medium">CSV Format Example:</p>
-          <code className="block bg-surface-100 rounded p-2 overflow-x-auto">
-            subject,day,start_time,end_time,location,professor
-            <br />
-            Physics,Monday,09:00,10:30,Room 101,Dr. Smith
-            <br />
-            Math,Tuesday,14:00,15:30,Room 202,Prof. Johnson
-          </code>
-        </div>
-      )}
+      {/* CSV format hint - removed, now using template download */}
     </div>
   );
 }

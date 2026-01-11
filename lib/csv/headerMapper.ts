@@ -1,4 +1,4 @@
-import { HEADER_ALIASES } from '../constants';
+import { HEADER_ALIASES } from "../constants";
 
 /**
  * Map raw CSV headers to canonical field names
@@ -6,7 +6,9 @@ import { HEADER_ALIASES } from '../constants';
  */
 export function mapHeaders(rawHeaders: string[]): Map<string, string> {
   const mapping = new Map<string, string>();
-  const normalized = rawHeaders.map((h) => h.toLowerCase().trim().replace(/\s+/g, '_'));
+  const normalized = rawHeaders.map((h) =>
+    h.toLowerCase().trim().replace(/\s+/g, "_")
+  );
 
   for (const [canonical, aliases] of Object.entries(HEADER_ALIASES)) {
     const index = normalized.findIndex((h) => aliases.includes(h));

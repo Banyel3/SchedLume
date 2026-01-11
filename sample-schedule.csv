@@ -1,16 +1,16 @@
-Subject,Day,Start,End,Room,Instructor
-Mathematics,Monday,9:00 AM,10:30 AM,Room 201,Dr. Smith
-Physics,Monday,11:00 AM,12:30 PM,Lab A,Prof. Johnson
-Computer Science,Monday,2:00 PM,3:30 PM,Lab B,Dr. Chen
-English Literature,Tuesday,9:00 AM,10:30 AM,Room 105,Ms. Davis
-History,Tuesday,11:00 AM,12:30 PM,Room 302,Prof. Wilson
-Chemistry,Tuesday,2:00 PM,4:00 PM,Lab C,Dr. Brown
-Mathematics,Wednesday,9:00 AM,10:30 AM,Room 201,Dr. Smith
-Art,Wednesday,11:00 AM,1:00 PM,Studio 1,Ms. Garcia
-Physical Education,Wednesday,3:00 PM,4:30 PM,Gymnasium,Coach Miller
-Physics,Thursday,9:00 AM,10:30 AM,Lab A,Prof. Johnson
-English Literature,Thursday,11:00 AM,12:30 PM,Room 105,Ms. Davis
-Computer Science,Thursday,2:00 PM,3:30 PM,Lab B,Dr. Chen
-Chemistry,Friday,9:00 AM,11:00 AM,Lab C,Dr. Brown
-History,Friday,11:30 AM,1:00 PM,Room 302,Prof. Wilson
-Music,Friday,2:00 PM,3:30 PM,Music Hall,Mr. Taylor
+subject_name,day_of_week,start_time,end_time,location,professor,color
+Mathematics,Monday,09:00,10:30,Room 201,Dr. Smith,#FF6B6B
+Physics,Monday,11:00,12:30,Lab A,Prof. Johnson,#4ECDC4
+Computer Science,Monday,14:00,15:30,Lab B,Dr. Chen,#45B7D1
+English Literature,Tuesday,09:00,10:30,Room 105,Ms. Davis,#96CEB4
+History,Tuesday,11:00,12:30,Room 302,Prof. Wilson,#FFEAA7
+Chemistry,Tuesday,14:00,16:00,Lab C,Dr. Brown,#DDA0DD
+Mathematics,Wednesday,09:00,10:30,Room 201,Dr. Smith,#FF6B6B
+Art,Wednesday,11:00,13:00,Studio 1,Ms. Garcia,#98D8C8
+Physical Education,Wednesday,15:00,16:30,Gymnasium,Coach Miller,#F7DC6F
+Physics,Thursday,09:00,10:30,Lab A,Prof. Johnson,#4ECDC4
+English Literature,Thursday,11:00,12:30,Room 105,Ms. Davis,#96CEB4
+Computer Science,Thursday,14:00,15:30,Lab B,Dr. Chen,#45B7D1
+Chemistry,Friday,09:00,11:00,Lab C,Dr. Brown,#DDA0DD
+History,Friday,11:30,13:00,Room 302,Prof. Wilson,#FFEAA7
+Music,Friday,14:00,15:30,Music Hall,Mr. Taylor,#BB8FCE

@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import { useState, useEffect, useCallback, useRef } from 'react';
-import { v4 as uuidv4 } from 'uuid';
-import { ClassNote } from '@/types';
-import { getNote, saveNote } from '@/lib/db/noteStore';
-import { useDebounce } from './useDebounce';
-import { DEBOUNCE_MS } from '@/lib/constants';
+import { useState, useEffect, useRef } from "react";
+import { v4 as uuidv4 } from "uuid";
+import { ClassNote } from "@/types";
+import { getNote, saveNote } from "@/lib/db/noteStore";
+import { useDebounce } from "./useDebounce";
+import { DEBOUNCE_MS } from "@/lib/constants";
 
 interface UseNoteResult {
   noteText: string;
@@ -21,19 +21,19 @@ export function useNote(
   subjectName: string,
   startTime: string
 ): UseNoteResult {
-  const [noteText, setNoteText] = useState('');
+  const [noteText, setNoteText] = useState("");
   const [lastSaved, setLastSaved] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<Error | null>(null);
   const [initialized, setInitialized] = useState(false);
-  
+
   const debouncedText = useDebounce(noteText, DEBOUNCE_MS);
   const noteIdRef = useRef<string | null>(null);
 
   // Load existing note
   useEffect(() => {
     setInitialized(false);
-    
+
     getNote(classInstanceKey)
       .then((note) => {
         if (note) {
@@ -41,14 +41,14 @@ export function useNote(
           setLastSaved(note.updatedAt);
           noteIdRef.current = note.id;
         } else {
-          setNoteText('');
+          setNoteText("");
           setLastSaved(null);
           noteIdRef.current = null;
         }
         setInitialized(true);
       })
       .catch((err) => {
-        setError(err instanceof Error ? err : new Error('Failed to load note'));
+        setError(err instanceof Error ? err : new Error("Failed to load note"));
         setInitialized(true);
       });
   }, [classInstanceKey]);
@@ -56,15 +56,15 @@ export function useNote(
   // Autosave on debounced change
   useEffect(() => {
     if (!initialized) return;
-    
+
     // Don't save empty notes that never existed
-    if (debouncedText === '' && !noteIdRef.current) return;
-    
+    if (debouncedText === "" && !noteIdRef.current) return;
+
     const save = async () => {
       try {
         setSaving(true);
         setError(null);
-        
+
         const note: ClassNote = {
           id: noteIdRef.current || uuidv4(),
           date,
@@ -74,19 +74,26 @@ export function useNote(
           noteText: debouncedText,
           updatedAt: new Date().toISOString(),
         };
-        
+
         await saveNote(note);
         noteIdRef.current = note.id;
         setLastSaved(note.updatedAt);
       } catch (err) {
-        setError(err instanceof Error ? err : new Error('Failed to save note'));
+        setError(err instanceof Error ? err : new Error("Failed to save note"));
       } finally {
         setSaving(false);
       }
     };
-    
+
     save();
-  }, [debouncedText, initialized, date, classInstanceKey, subjectName, startTime]);
+  }, [
+    debouncedText,
+    initialized,
+    date,
+    classInstanceKey,
+    subjectName,
+    startTime,
+  ]);
 
   return {
     noteText,

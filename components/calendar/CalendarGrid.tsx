@@ -1,16 +1,15 @@
-'use client';
+"use client";
 
-import { useMemo } from 'react';
-import { WEEKDAYS_SHORT } from '@/lib/constants';
+import { useMemo } from "react";
+import { WEEKDAYS_SHORT } from "@/lib/constants";
 import {
   getMonthDates,
   getWeekday,
   isToday,
   formatMonthYear,
   parseDate,
-  formatDate,
-} from '@/lib/utils/date';
-import { NoteDot } from '@/components/ui';
+} from "@/lib/utils/date";
+import { NoteDot } from "@/components/ui";
 
 interface CalendarGridProps {
   year: number;
@@ -19,7 +18,7 @@ interface CalendarGridProps {
   onDateSelect: (date: string) => void;
   datesWithNotes?: Set<string>;
   datesWithOverrides?: Set<string>;
-  weekStart?: 'monday' | 'sunday';
+  weekStart?: "monday" | "sunday";
   onPrevMonth?: () => void;
   onNextMonth?: () => void;
 }
@@ -31,14 +30,14 @@ export function CalendarGrid({
   onDateSelect,
   datesWithNotes = new Set(),
   datesWithOverrides = new Set(),
-  weekStart = 'monday',
+  weekStart = "monday",
   onPrevMonth,
   onNextMonth,
 }: CalendarGridProps) {
   const monthDates = useMemo(() => getMonthDates(year, month), [year, month]);
 
   const orderedDays = useMemo(() => {
-    if (weekStart === 'monday') {
+    if (weekStart === "monday") {
       return [1, 2, 3, 4, 5, 6, 0]; // Mon-Sun
     }
     return [0, 1, 2, 3, 4, 5, 6]; // Sun-Sat
@@ -47,7 +46,7 @@ export function CalendarGrid({
   // Calculate empty cells before first day
   const firstDayOfMonth = getWeekday(monthDates[0]);
   const emptyDaysBefore = useMemo(() => {
-    if (weekStart === 'monday') {
+    if (weekStart === "monday") {
       return firstDayOfMonth === 0 ? 6 : firstDayOfMonth - 1;
     }
     return firstDayOfMonth;
@@ -64,7 +63,7 @@ export function CalendarGrid({
   // Calculate days from next month
   const totalCells = Math.ceil((emptyDaysBefore + monthDates.length) / 7) * 7;
   const emptyDaysAfter = totalCells - emptyDaysBefore - monthDates.length;
-  
+
   const nextMonthDates = useMemo(() => {
     const nextMonth = month === 11 ? 0 : month + 1;
     const nextYear = month === 11 ? year + 1 : year;
@@ -73,36 +72,58 @@ export function CalendarGrid({
   }, [year, month, emptyDaysAfter]);
 
   return (
-    <div className="bg-white">
+    <div className="bg-white rounded-2xl shadow-card overflow-hidden">
       {/* Month header */}
-      <div className="flex items-center justify-between px-4 py-3">
+      <div className="flex items-center justify-between px-6 py-5">
         <button
           onClick={onPrevMonth}
-          className="p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-surface-100"
+          className="w-10 h-10 flex items-center justify-center text-gray-400 hover:text-gray-600 rounded-xl hover:bg-surface-100 transition-colors"
           aria-label="Previous month"
         >
-          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+          <svg
+            className="w-5 h-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M15 19l-7-7 7-7"
+            />
           </svg>
         </button>
-        <h2 className="text-lg font-semibold text-gray-900">{formatMonthYear(year, month)}</h2>
+        <h2 className="text-lg font-semibold text-gray-900">
+          {formatMonthYear(year, month)}
+        </h2>
         <button
           onClick={onNextMonth}
-          className="p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-surface-100"
+          className="w-10 h-10 flex items-center justify-center text-gray-400 hover:text-gray-600 rounded-xl hover:bg-surface-100 transition-colors"
           aria-label="Next month"
         >
-          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+          <svg
+            className="w-5 h-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M9 5l7 7-7 7"
+            />
           </svg>
         </button>
       </div>
 
       {/* Weekday headers */}
-      <div className="grid grid-cols-7 border-b border-surface-200">
+      <div className="grid grid-cols-7 border-b border-surface-200 px-4">
         {orderedDays.map((day) => (
           <div
             key={day}
-            className="py-2 text-center text-xs font-medium text-gray-400 uppercase"
+            className="py-3 text-center text-xs font-medium text-gray-400 uppercase tracking-wide"
           >
             {WEEKDAYS_SHORT[day]}
           </div>
@@ -110,7 +131,7 @@ export function CalendarGrid({
       </div>
 
       {/* Calendar grid */}
-      <div className="grid grid-cols-7">
+      <div className="grid grid-cols-7 p-3 gap-1">
         {/* Previous month days (faded) */}
         {prevMonthDates.map((date) => (
           <DateCell
@@ -181,27 +202,31 @@ function DateCell({
   return (
     <button
       onClick={onClick}
-      className={`relative flex flex-col items-center justify-center h-12 transition-colors ${
+      className={`relative flex flex-col items-center justify-center h-11 rounded-lg transition-all ${
         isSelected
-          ? 'bg-primary-400 text-white'
+          ? "bg-primary-400 text-white shadow-sm"
           : isToday
-          ? 'bg-primary-50 text-primary-600'
+          ? "bg-primary-50 text-primary-600"
           : isCurrentMonth
-          ? 'text-gray-700 hover:bg-surface-100'
-          : 'text-gray-300 hover:bg-surface-50'
+          ? "text-gray-700 hover:bg-surface-100"
+          : "text-gray-300 hover:bg-surface-50"
       }`}
     >
-      <span className={`text-sm ${isSelected || isToday ? 'font-semibold' : ''}`}>{dayNum}</span>
-      
+      <span
+        className={`text-sm ${isSelected || isToday ? "font-semibold" : ""}`}
+      >
+        {dayNum}
+      </span>
+
       {/* Indicators */}
       <div className="flex items-center gap-0.5 mt-0.5 h-2">
         {hasNote && (
-          <NoteDot size="sm" className={isSelected ? 'bg-white' : ''} />
+          <NoteDot size="sm" className={isSelected ? "bg-white" : ""} />
         )}
         {hasOverride && (
           <span
             className={`w-1.5 h-1.5 rounded-full ${
-              isSelected ? 'bg-white/80' : 'bg-blue-400'
+              isSelected ? "bg-white/80" : "bg-blue-400"
             }`}
           />
         )}

@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { useState, useEffect, useCallback } from 'react';
-import { ClassNote } from '@/types';
-import { getNotesForDate, getDatesWithNotes } from '@/lib/db/noteStore';
+import { useState, useEffect, useCallback } from "react";
+import { ClassNote } from "@/types";
+import { getNotesForDate, getDatesWithNotes } from "@/lib/db/noteStore";
 
 interface UseNotesResult {
   notes: ClassNote[];
@@ -25,7 +25,7 @@ export function useNotes(date: string): UseNotesResult {
       setError(null);
       const data = await getNotesForDate(date);
       setNotes(data);
-      
+
       const map = new Map<string, ClassNote>();
       data.forEach((note) => {
         if (note.noteText.trim()) {
@@ -34,7 +34,7 @@ export function useNotes(date: string): UseNotesResult {
       });
       setNoteMap(map);
     } catch (err) {
-      setError(err instanceof Error ? err : new Error('Failed to load notes'));
+      setError(err instanceof Error ? err : new Error("Failed to load notes"));
     } finally {
       setLoading(false);
     }
@@ -48,9 +48,12 @@ export function useNotes(date: string): UseNotesResult {
     await loadNotes();
   }, [loadNotes]);
 
-  const hasNote = useCallback((classInstanceKey: string) => {
-    return noteMap.has(classInstanceKey);
-  }, [noteMap]);
+  const hasNote = useCallback(
+    (classInstanceKey: string) => {
+      return noteMap.has(classInstanceKey);
+    },
+    [noteMap]
+  );
 
   return { notes, noteMap, loading, error, refresh, hasNote };
 }
@@ -61,7 +64,10 @@ interface UseDatesWithNotesResult {
   refresh: () => Promise<void>;
 }
 
-export function useDatesWithNotes(startDate: string, endDate: string): UseDatesWithNotesResult {
+export function useDatesWithNotes(
+  startDate: string,
+  endDate: string
+): UseDatesWithNotesResult {
   const [datesWithNotes, setDatesWithNotes] = useState<Set<string>>(new Set());
   const [loading, setLoading] = useState(true);
 
@@ -71,7 +77,7 @@ export function useDatesWithNotes(startDate: string, endDate: string): UseDatesW
       const dates = await getDatesWithNotes(startDate, endDate);
       setDatesWithNotes(dates);
     } catch (err) {
-      console.error('Failed to load dates with notes:', err);
+      console.error("Failed to load dates with notes:", err);
     } finally {
       setLoading(false);
     }

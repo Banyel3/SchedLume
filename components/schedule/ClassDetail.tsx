@@ -1,17 +1,24 @@
-'use client';
+"use client";
 
-import { ResolvedClass } from '@/types';
-import { formatTime, formatTimeRange, getDurationMinutes, formatDuration } from '@/lib/utils/time';
-import { formatDateDisplay } from '@/lib/utils/date';
-import { Badge } from '@/components/ui';
-import { NoteEditor } from '@/components/forms';
+import { ResolvedClass } from "@/types";
+import {
+  formatTimeRange,
+  getDurationMinutes,
+  formatDuration,
+} from "@/lib/utils/time";
+import { formatDateDisplay } from "@/lib/utils/date";
+import { Badge } from "@/components/ui";
+import { NoteEditor } from "@/components/forms";
 
 interface ClassDetailProps {
   classData: ResolvedClass;
-  timeFormat?: '12h' | '24h';
+  timeFormat?: "12h" | "24h";
 }
 
-export function ClassDetail({ classData, timeFormat = '12h' }: ClassDetailProps) {
+export function ClassDetail({
+  classData,
+  timeFormat = "12h",
+}: ClassDetailProps) {
   const {
     instanceKey,
     subjectName,
@@ -27,34 +34,52 @@ export function ClassDetail({ classData, timeFormat = '12h' }: ClassDetailProps)
   } = classData;
 
   const duration = getDurationMinutes(startTime, endTime);
-  const borderColor = color || '#F97B5C';
+  const borderColor = color || "#F97B5C";
 
   return (
     <div className="flex flex-col h-full">
       {/* Class info section */}
-      <div className="px-4 py-6 border-b border-surface-200">
+      <div className="px-4 sm:px-6 py-6 border-b border-surface-200">
         {/* Subject header with color accent */}
         <div
           className="inline-flex items-center gap-3 px-4 py-3 rounded-2xl mb-4"
           style={{ backgroundColor: `${borderColor}15` }}
         >
-          <div className="w-3 h-3 rounded-full" style={{ backgroundColor: borderColor }} />
-          <h2 className={`text-xl font-bold text-gray-900 ${isCanceled ? 'line-through' : ''}`}>
+          <div
+            className="w-3 h-3 rounded-full shrink-0"
+            style={{ backgroundColor: borderColor }}
+          />
+          <h2
+            className={`text-xl font-bold text-gray-900 ${
+              isCanceled ? "line-through" : ""
+            }`}
+          >
             {subjectName}
           </h2>
         </div>
 
         {/* Status badges */}
-        <div className="flex gap-2 mb-4">
-          {isCanceled && <Badge variant="canceled">Canceled for this day</Badge>}
-          {isOverridden && !isCanceled && <Badge variant="override">Modified for this day</Badge>}
-          {isAdded && <Badge variant="added">One-time class</Badge>}
-        </div>
+        {(isCanceled || isOverridden || isAdded) && (
+          <div className="flex flex-wrap gap-2 mb-4">
+            {isCanceled && (
+              <Badge variant="canceled">Canceled for this day</Badge>
+            )}
+            {isOverridden && !isCanceled && (
+              <Badge variant="override">Modified for this day</Badge>
+            )}
+            {isAdded && <Badge variant="added">One-time class</Badge>}
+          </div>
+        )}
 
         {/* Date and time */}
         <div className="space-y-3">
           <div className="flex items-center gap-3 text-gray-600">
-            <svg className="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg
+              className="w-5 h-5 text-gray-400"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -66,7 +91,12 @@ export function ClassDetail({ classData, timeFormat = '12h' }: ClassDetailProps)
           </div>
 
           <div className="flex items-center gap-3 text-gray-600">
-            <svg className="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg
+              className="w-5 h-5 text-gray-400"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -76,13 +106,20 @@ export function ClassDetail({ classData, timeFormat = '12h' }: ClassDetailProps)
             </svg>
             <span>
               {formatTimeRange(startTime, endTime, timeFormat)}
-              <span className="text-gray-400 ml-2">({formatDuration(duration)})</span>
+              <span className="text-gray-400 ml-2">
+                ({formatDuration(duration)})
+              </span>
             </span>
           </div>
 
           {location && (
             <div className="flex items-center gap-3 text-gray-600">
-              <svg className="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg
+                className="w-5 h-5 text-gray-400"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -102,7 +139,12 @@ export function ClassDetail({ classData, timeFormat = '12h' }: ClassDetailProps)
 
           {professor && (
             <div className="flex items-center gap-3 text-gray-600">
-              <svg className="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg
+                className="w-5 h-5 text-gray-400"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -117,7 +159,7 @@ export function ClassDetail({ classData, timeFormat = '12h' }: ClassDetailProps)
       </div>
 
       {/* Notes section */}
-      <div className="flex-1 p-4">
+      <div className="flex-1 px-4 sm:px-6 py-4">
         <NoteEditor
           date={date}
           classInstanceKey={instanceKey}

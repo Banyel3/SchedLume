@@ -1,22 +1,29 @@
 /**
  * Format a time string for display
  */
-export function formatTime(time: string, format: '12h' | '24h' = '12h'): string {
-  const [hours, minutes] = time.split(':').map(Number);
-  
-  if (format === '24h') {
+export function formatTime(
+  time: string,
+  format: "12h" | "24h" = "12h"
+): string {
+  const [hours, minutes] = time.split(":").map(Number);
+
+  if (format === "24h") {
     return time;
   }
-  
-  const period = hours >= 12 ? 'PM' : 'AM';
+
+  const period = hours >= 12 ? "PM" : "AM";
   const displayHours = hours % 12 || 12;
-  return `${displayHours}:${minutes.toString().padStart(2, '0')} ${period}`;
+  return `${displayHours}:${minutes.toString().padStart(2, "0")} ${period}`;
 }
 
 /**
  * Format a time range for display
  */
-export function formatTimeRange(startTime: string, endTime: string, format: '12h' | '24h' = '12h'): string {
+export function formatTimeRange(
+  startTime: string,
+  endTime: string,
+  format: "12h" | "24h" = "12h"
+): string {
   return `${formatTime(startTime, format)} - ${formatTime(endTime, format)}`;
 }
 
@@ -31,7 +38,11 @@ export function compareTime(a: string, b: string): number {
 /**
  * Check if a time is between two other times
  */
-export function isTimeBetween(time: string, start: string, end: string): boolean {
+export function isTimeBetween(
+  time: string,
+  start: string,
+  end: string
+): boolean {
   return time >= start && time <= end;
 }
 
@@ -40,8 +51,8 @@ export function isTimeBetween(time: string, start: string, end: string): boolean
  */
 export function getCurrentTime(): string {
   const now = new Date();
-  const hours = now.getHours().toString().padStart(2, '0');
-  const minutes = now.getMinutes().toString().padStart(2, '0');
+  const hours = now.getHours().toString().padStart(2, "0");
+  const minutes = now.getMinutes().toString().padStart(2, "0");
   return `${hours}:${minutes}`;
 }
 
@@ -49,12 +60,12 @@ export function getCurrentTime(): string {
  * Calculate duration between two times in minutes
  */
 export function getDurationMinutes(startTime: string, endTime: string): number {
-  const [startH, startM] = startTime.split(':').map(Number);
-  const [endH, endM] = endTime.split(':').map(Number);
-  
+  const [startH, startM] = startTime.split(":").map(Number);
+  const [endH, endM] = endTime.split(":").map(Number);
+
   const startMinutes = startH * 60 + startM;
   const endMinutes = endH * 60 + endM;
-  
+
   return endMinutes - startMinutes;
 }
 
@@ -64,15 +75,15 @@ export function getDurationMinutes(startTime: string, endTime: string): number {
 export function formatDuration(minutes: number): string {
   const hours = Math.floor(minutes / 60);
   const mins = minutes % 60;
-  
+
   if (hours === 0) {
     return `${mins}min`;
   }
-  
+
   if (mins === 0) {
     return `${hours}h`;
   }
-  
+
   return `${hours}h ${mins}min`;
 }
 

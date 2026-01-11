@@ -1,4 +1,4 @@
-import { WEEKDAYS, WEEKDAYS_SHORT } from '../constants';
+import { WEEKDAYS, WEEKDAYS_SHORT } from "../constants";
 
 /**
  * Get today's date in YYYY-MM-DD format
@@ -12,8 +12,8 @@ export function getToday(): string {
  */
 export function formatDate(date: Date): string {
   const year = date.getFullYear();
-  const month = (date.getMonth() + 1).toString().padStart(2, '0');
-  const day = date.getDate().toString().padStart(2, '0');
+  const month = (date.getMonth() + 1).toString().padStart(2, "0");
+  const day = date.getDate().toString().padStart(2, "0");
   return `${year}-${month}-${day}`;
 }
 
@@ -21,7 +21,7 @@ export function formatDate(date: Date): string {
  * Parse a YYYY-MM-DD string to a Date object
  */
 export function parseDate(dateString: string): Date {
-  const [year, month, day] = dateString.split('-').map(Number);
+  const [year, month, day] = dateString.split("-").map(Number);
   return new Date(year, month - 1, day);
 }
 
@@ -58,27 +58,36 @@ export function addDays(dateString: string, days: number): string {
 /**
  * Get an array of dates for a week containing the given date
  */
-export function getWeekDates(dateString: string, weekStart: 'monday' | 'sunday' = 'monday'): string[] {
+export function getWeekDates(
+  dateString: string,
+  weekStart: "monday" | "sunday" = "monday"
+): string[] {
   const date = parseDate(dateString);
   const currentDay = date.getDay();
-  
+
   // Calculate offset to week start
-  const startOffset = weekStart === 'monday' 
-    ? (currentDay === 0 ? -6 : 1 - currentDay)
-    : -currentDay;
-  
+  const startOffset =
+    weekStart === "monday"
+      ? currentDay === 0
+        ? -6
+        : 1 - currentDay
+      : -currentDay;
+
   const weekDates: string[] = [];
   for (let i = 0; i < 7; i++) {
     weekDates.push(addDays(dateString, startOffset + i));
   }
-  
+
   return weekDates;
 }
 
 /**
  * Get an array of dates around a given date (for date strip)
  */
-export function getSurroundingDates(dateString: string, range: number = 3): string[] {
+export function getSurroundingDates(
+  dateString: string,
+  range: number = 3
+): string[] {
   const dates: string[] = [];
   for (let i = -range; i <= range; i++) {
     dates.push(addDays(dateString, i));
@@ -91,10 +100,10 @@ export function getSurroundingDates(dateString: string, range: number = 3): stri
  */
 export function formatDateDisplay(dateString: string): string {
   const date = parseDate(dateString);
-  return date.toLocaleDateString('en-US', {
-    weekday: 'long',
-    month: 'long',
-    day: 'numeric',
+  return date.toLocaleDateString("en-US", {
+    weekday: "long",
+    month: "long",
+    day: "numeric",
   });
 }
 
@@ -103,9 +112,9 @@ export function formatDateDisplay(dateString: string): string {
  */
 export function formatDateShort(dateString: string): string {
   const date = parseDate(dateString);
-  return date.toLocaleDateString('en-US', {
-    month: 'short',
-    day: 'numeric',
+  return date.toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
   });
 }
 
@@ -157,18 +166,21 @@ export function getLastDayOfMonth(year: number, month: number): string {
 export function getMonthDates(year: number, month: number): string[] {
   const dates: string[] = [];
   const lastDay = new Date(year, month + 1, 0).getDate();
-  
+
   for (let day = 1; day <= lastDay; day++) {
     dates.push(formatDate(new Date(year, month, day)));
   }
-  
+
   return dates;
 }
 
 /**
  * Get the year and month from a date string
  */
-export function getYearMonth(dateString: string): { year: number; month: number } {
+export function getYearMonth(dateString: string): {
+  year: number;
+  month: number;
+} {
   const date = parseDate(dateString);
   return {
     year: date.getFullYear(),
@@ -181,8 +193,8 @@ export function getYearMonth(dateString: string): { year: number; month: number 
  */
 export function formatMonthYear(year: number, month: number): string {
   const date = new Date(year, month, 1);
-  return date.toLocaleDateString('en-US', {
-    month: 'long',
-    year: 'numeric',
+  return date.toLocaleDateString("en-US", {
+    month: "long",
+    year: "numeric",
   });
 }

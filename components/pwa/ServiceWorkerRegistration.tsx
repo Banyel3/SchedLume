@@ -1,26 +1,30 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
 export function ServiceWorkerRegistration() {
   const [updateAvailable, setUpdateAvailable] = useState(false);
-  const [registration, setRegistration] = useState<ServiceWorkerRegistration | null>(null);
+  const [registration, setRegistration] =
+    useState<ServiceWorkerRegistration | null>(null);
 
   useEffect(() => {
-    if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
+    if (typeof window !== "undefined" && "serviceWorker" in navigator) {
       // Register service worker
       navigator.serviceWorker
-        .register('/sw.js')
+        .register("/sw.js")
         .then((reg) => {
-          console.log('Service Worker registered with scope:', reg.scope);
+          console.log("Service Worker registered with scope:", reg.scope);
           setRegistration(reg);
 
           // Check for updates periodically
-          reg.addEventListener('updatefound', () => {
+          reg.addEventListener("updatefound", () => {
             const newWorker = reg.installing;
             if (newWorker) {
-              newWorker.addEventListener('statechange', () => {
-                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+              newWorker.addEventListener("statechange", () => {
+                if (
+                  newWorker.state === "installed" &&
+                  navigator.serviceWorker.controller
+                ) {
                   // New content is available
                   setUpdateAvailable(true);
                 }
@@ -29,11 +33,11 @@ export function ServiceWorkerRegistration() {
           });
         })
         .catch((error) => {
-          console.error('Service Worker registration failed:', error);
+          console.error("Service Worker registration failed:", error);
         });
 
       // Handle controller change (when new SW takes over)
-      navigator.serviceWorker.addEventListener('controllerchange', () => {
+      navigator.serviceWorker.addEventListener("controllerchange", () => {
         window.location.reload();
       });
     }
@@ -41,7 +45,7 @@ export function ServiceWorkerRegistration() {
 
   const handleUpdate = () => {
     if (registration?.waiting) {
-      registration.waiting.postMessage('skipWaiting');
+      registration.waiting.postMessage("skipWaiting");
     }
   };
 
@@ -53,8 +57,13 @@ export function ServiceWorkerRegistration() {
     <div className="fixed bottom-20 left-4 right-4 z-50 animate-slide-up">
       <div className="bg-gray-900 text-white rounded-xl p-4 shadow-lg flex items-center justify-between gap-3">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-primary-500 flex items-center justify-center flex-shrink-0">
-            <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div className="w-10 h-10 rounded-full bg-primary-500 flex items-center justify-center shrink-0">
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"

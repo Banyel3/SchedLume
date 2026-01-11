@@ -19,23 +19,26 @@ A mobile-first, offline-capable class schedule viewer built with Next.js. Perfec
 
 ### Prerequisites
 
-- Node.js 18+ 
+- Node.js 18+
 - npm, yarn, pnpm, or bun
 
 ### Installation
 
 1. Clone the repository:
+
 ```bash
 git clone https://github.com/yourusername/schedlume.git
 cd schedlume
 ```
 
 2. Install dependencies:
+
 ```bash
 npm install
 ```
 
 3. Run the development server:
+
 ```bash
 npm run dev
 ```
@@ -53,16 +56,17 @@ npm start
 
 Import your class schedule using a CSV file with these columns:
 
-| Column | Required | Description | Example |
-|--------|----------|-------------|---------|
-| Subject | ✅ | Class name | Mathematics |
-| Day | ✅ | Day of week | Monday / Mon / M |
-| Start | ✅ | Start time | 9:00 AM / 09:00 |
-| End | ✅ | End time | 10:30 AM / 10:30 |
-| Room | ❌ | Room/Location | Room 201 |
-| Instructor | ❌ | Teacher name | Dr. Smith |
+| Column     | Required | Description   | Example          |
+| ---------- | -------- | ------------- | ---------------- |
+| Subject    | ✅       | Class name    | Mathematics      |
+| Day        | ✅       | Day of week   | Monday / Mon / M |
+| Start      | ✅       | Start time    | 9:00 AM / 09:00  |
+| End        | ✅       | End time      | 10:30 AM / 10:30 |
+| Room       | ❌       | Room/Location | Room 201         |
+| Instructor | ❌       | Teacher name  | Dr. Smith        |
 
 ### Sample CSV
+
 ```csv
 Subject,Day,Start,End,Room,Instructor
 Mathematics,Monday,9:00 AM,10:30 AM,Room 201,Dr. Smith
@@ -110,14 +114,17 @@ schedlume/
 ## 📱 PWA Installation
 
 ### iOS
+
 1. Open in Safari
 2. Tap Share → "Add to Home Screen"
 
 ### Android
+
 1. Open in Chrome
 2. Tap menu → "Install app" or "Add to Home Screen"
 
 ### Desktop
+
 1. Look for install icon in address bar
 2. Click "Install"
 
