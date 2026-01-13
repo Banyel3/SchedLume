@@ -144,13 +144,13 @@ export default function WeekPage() {
       />
 
       <main className="w-full">
-        <div className="py-4 px-6 sm:px-8 border-b border-surface-200/80 bg-white/95 backdrop-blur-sm">
+        <div className="py-4 px-4 sm:px-6 border-b border-surface-200/80 bg-white/95 backdrop-blur-sm">
           <h2 className="font-medium text-gray-900">
             {formatDateDisplay(selectedDate)}
           </h2>
         </div>
 
-        <div className="py-5 px-6 sm:px-8">
+        <div className="py-5 px-4 sm:px-6">
           <ClassList
             classes={schedule}
             loading={loading}

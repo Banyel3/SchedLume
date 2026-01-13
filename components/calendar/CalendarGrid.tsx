@@ -18,6 +18,7 @@ interface CalendarGridProps {
   onDateSelect: (date: string) => void;
   datesWithNotes?: Set<string>;
   datesWithOverrides?: Set<string>;
+  datesWithGeneralNotes?: Set<string>;
   weekStart?: "monday" | "sunday";
   onPrevMonth?: () => void;
   onNextMonth?: () => void;
@@ -30,6 +31,7 @@ export function CalendarGrid({
   onDateSelect,
   datesWithNotes = new Set(),
   datesWithOverrides = new Set(),
+  datesWithGeneralNotes = new Set(),
   weekStart = "monday",
   onPrevMonth,
   onNextMonth,
@@ -142,6 +144,7 @@ export function CalendarGrid({
             isToday={isToday(date)}
             hasNote={datesWithNotes.has(date)}
             hasOverride={datesWithOverrides.has(date)}
+            hasGeneralNote={datesWithGeneralNotes.has(date)}
             onClick={() => onDateSelect(date)}
           />
         ))}
@@ -156,6 +159,7 @@ export function CalendarGrid({
             isToday={isToday(date)}
             hasNote={datesWithNotes.has(date)}
             hasOverride={datesWithOverrides.has(date)}
+            hasGeneralNote={datesWithGeneralNotes.has(date)}
             onClick={() => onDateSelect(date)}
           />
         ))}
@@ -170,6 +174,7 @@ export function CalendarGrid({
             isToday={isToday(date)}
             hasNote={datesWithNotes.has(date)}
             hasOverride={datesWithOverrides.has(date)}
+            hasGeneralNote={datesWithGeneralNotes.has(date)}
             onClick={() => onDateSelect(date)}
           />
         ))}
@@ -185,6 +190,7 @@ interface DateCellProps {
   isToday: boolean;
   hasNote: boolean;
   hasOverride: boolean;
+  hasGeneralNote: boolean;
   onClick: () => void;
 }
 
@@ -195,6 +201,7 @@ function DateCell({
   isToday,
   hasNote,
   hasOverride,
+  hasGeneralNote,
   onClick,
 }: DateCellProps) {
   const dayNum = parseDate(date).getDate();
@@ -222,6 +229,13 @@ function DateCell({
       <div className="flex items-center gap-0.5 mt-0.5 h-2">
         {hasNote && (
           <NoteDot size="sm" className={isSelected ? "bg-white" : ""} />
+        )}
+        {hasGeneralNote && (
+          <span
+            className={`w-1.5 h-1.5 rounded-full ${
+              isSelected ? "bg-white/80" : "bg-green-400"
+            }`}
+          />
         )}
         {hasOverride && (
           <span

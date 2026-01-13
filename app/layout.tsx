@@ -31,7 +31,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
         <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
@@ -39,7 +39,7 @@ export default function RootLayout({
       <body className="antialiased w-full">
         <MobileOnlyBlocker />
         {/* Main content area with bottom padding for nav + safe area */}
-        <div className="min-h-screen w-full pb-24 pb-safe">{children}</div>
+        <div className="min-h-screen w-full max-w-lg mx-auto pb-24 pt-4">{children}</div>
         <BottomNav />
         <ServiceWorkerRegistration />
       </body>

@@ -108,7 +108,7 @@ export default function TodayPage() {
         datesWithNotes={datesWithNotes}
       />
 
-      <main className="w-full px-6 sm:px-8 py-5">
+      <main className="w-full px-4 sm:px-6 py-5">
         <ClassList
           classes={schedule}
           loading={loading}

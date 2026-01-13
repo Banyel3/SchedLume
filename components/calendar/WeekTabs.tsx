@@ -27,7 +27,7 @@ export function WeekTabs({
   }, [weekStart]);
 
   return (
-    <div className="bg-white/95 backdrop-blur-sm border-b border-surface-200/80 sticky top-14 z-20">
+    <div className="bg-white/95 backdrop-blur-sm border-b border-surface-200/80 sticky top-[72px] sm:top-[80px] z-20 rounded-b-2xl mx-4">
       <div className="flex items-center justify-around w-full px-6 sm:px-8">
         {orderedDays.map((day) => {
           const isSelected = day === selectedDay;

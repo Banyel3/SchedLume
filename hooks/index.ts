@@ -5,3 +5,4 @@ export { useNote } from "./useNote";
 export { useSettings } from "./useSettings";
 export { useDebounce } from "./useDebounce";
 export { useSwipeNavigation } from "./useSwipeNavigation";
+export { useGeneralNotes, useDatesWithGeneralNotes } from "./useGeneralNotes";

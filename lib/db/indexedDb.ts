@@ -52,7 +52,7 @@ export async function initDB(): Promise<IDBDatabase> {
         );
       }
 
-      // Notes store
+      // Notes store (class-specific notes)
       if (!db.objectStoreNames.contains(STORE_NAMES.NOTES)) {
         const noteStore = db.createObjectStore(STORE_NAMES.NOTES, {
           keyPath: "id",
@@ -67,6 +67,23 @@ export async function initDB(): Promise<IDBDatabase> {
       if (!db.objectStoreNames.contains(STORE_NAMES.SETTINGS)) {
         db.createObjectStore(STORE_NAMES.SETTINGS, { keyPath: "id" });
       }
+
+      // General notes store (v2) - standalone notes not tied to classes
+      if (!db.objectStoreNames.contains(STORE_NAMES.GENERAL_NOTES)) {
+        const generalNoteStore = db.createObjectStore(STORE_NAMES.GENERAL_NOTES, {
+          keyPath: "id",
+        });
+        generalNoteStore.createIndex("date", "date", { unique: false });
+        generalNoteStore.createIndex("dueDate", "dueDate", { unique: false });
+      }
+
+      // Notification records store (v2) - track shown notifications
+      if (!db.objectStoreNames.contains(STORE_NAMES.NOTIFICATION_RECORDS)) {
+        const notificationStore = db.createObjectStore(STORE_NAMES.NOTIFICATION_RECORDS, {
+          keyPath: "id",
+        });
+        notificationStore.createIndex("noteId", "noteId", { unique: false });
+      }
     };
   });
 }
@@ -80,6 +97,8 @@ export async function clearAllData(): Promise<void> {
       STORE_NAMES.OVERRIDES,
       STORE_NAMES.NOTES,
       STORE_NAMES.SETTINGS,
+      STORE_NAMES.GENERAL_NOTES,
+      STORE_NAMES.NOTIFICATION_RECORDS,
     ];
 
     const tx = db.transaction(storeNames, "readwrite");

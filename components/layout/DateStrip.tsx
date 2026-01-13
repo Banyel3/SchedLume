@@ -40,7 +40,7 @@ export function DateStrip({
   };
 
   return (
-    <div className="bg-white/95 backdrop-blur-sm border-b border-surface-200/80 sticky top-14 z-20">
+    <div className="bg-white/95 backdrop-blur-sm border-b border-surface-200/80 sticky top-[72px] sm:top-[80px] z-20 rounded-b-2xl mx-4">
       <div className="flex items-center justify-between px-6 sm:px-8 py-3 w-full">
         {/* Previous week button */}
         <button

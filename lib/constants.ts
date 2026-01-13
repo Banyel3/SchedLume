@@ -1,13 +1,15 @@
 // App-wide constants
 
 export const DB_NAME = "schedlume-db";
-export const DB_VERSION = 1;
+export const DB_VERSION = 2;
 
 export const STORE_NAMES = {
   BASE_SCHEDULES: "baseSchedules",
   OVERRIDES: "overrides",
   NOTES: "notes",
   SETTINGS: "settings",
+  GENERAL_NOTES: "generalNotes",
+  NOTIFICATION_RECORDS: "notificationRecords",
 } as const;
 
 export const WEEKDAYS = [

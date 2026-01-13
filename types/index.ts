@@ -43,6 +43,9 @@ export interface AppSettings {
   lastImportedFileName?: string;
   lastImportedAt?: string; // ISO timestamp
   schemaVersion: number;
+  notificationsEnabled: boolean;
+  notificationTime: "08:00" | "12:00" | "18:00";
+  notificationPermission: "default" | "granted" | "denied";
 }
 
 // Resolved class for display (base + override applied)
@@ -84,6 +87,26 @@ export interface CSVValidationError {
   message: string;
 }
 
+// General note (not tied to a specific class)
+export interface GeneralNote {
+  id: string; // UUID
+  date: string; // "YYYY-MM-DD" - the date this note is displayed on
+  title: string; // Short summary (max 100 chars)
+  noteText?: string; // Optional longer description
+  hasDueDate: boolean; // If true, dueDate triggers notifications
+  dueDate?: string; // "YYYY-MM-DD" - optional due date
+  createdAt: string; // ISO timestamp
+  updatedAt: string; // ISO timestamp
+}
+
+// Notification record to track shown notifications
+export interface NotificationRecord {
+  id: string; // `${noteId}:${date}`
+  noteId: string;
+  notificationDate: string; // "YYYY-MM-DD" - when notification was shown
+  shownAt: string; // ISO timestamp
+}
+
 // Default subject colors
 export const SUBJECT_COLORS = {
   coral: "#F97B5C",
@@ -104,4 +127,8 @@ export const DEFAULT_SETTINGS: AppSettings = {
   weekStart: "monday",
   timeFormat: "12h",
   schemaVersion: 1,
+  notificationsEnabled: false,
+  notificationTime: "08:00",
+  notificationPermission: "default",
 };
+

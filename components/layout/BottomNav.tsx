@@ -92,7 +92,7 @@ export function BottomNav() {
   const pathname = usePathname();
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-lg border-t border-surface-200 shadow-[0_-1px_8px_rgba(0,0,0,0.04)] z-40">
+    <nav className="fixed bottom-4 left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] max-w-lg bg-white/95 backdrop-blur-lg border border-surface-200 shadow-nav rounded-2xl z-40">
       {/* Main nav content with generous height and padding */}
       <div className="flex items-center justify-around h-[72px] w-full px-6 sm:px-8">
         {navItems.map((item) => {
@@ -118,8 +118,7 @@ export function BottomNav() {
           );
         })}
       </div>
-      {/* Safe area spacer for devices with home indicators */}
-      <div className="pb-safe bg-white/95" />
+
     </nav>
   );
 }

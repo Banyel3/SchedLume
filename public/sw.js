@@ -153,3 +153,76 @@ self.addEventListener("sync", (event) => {
     console.log("[SW] Background sync triggered");
   }
 });
+
+// Handle push notifications
+self.addEventListener("push", (event) => {
+  console.log("[SW] Push received:", event);
+  
+  let data = {};
+  if (event.data) {
+    try {
+      data = event.data.json();
+    } catch (e) {
+      data = { body: event.data.text() };
+    }
+  }
+
+  const title = data.title || "SchedLume Reminder";
+  const options = {
+    body: data.body || "You have a reminder",
+    icon: "/icons/icon-192x192.png",
+    badge: "/icons/icon-72x72.png",
+    tag: data.tag || "schedlume-push",
+    data: data.data || {},
+    requireInteraction: true,
+  };
+
+  event.waitUntil(self.registration.showNotification(title, options));
+});
+
+// Handle notification clicks
+self.addEventListener("notificationclick", (event) => {
+  console.log("[SW] Notification clicked:", event.notification.tag);
+  
+  event.notification.close();
+  
+  // Open or focus the app on calendar page
+  const urlToOpen = "/calendar";
+  
+  event.waitUntil(
+    self.clients.matchAll({ type: "window", includeUncontrolled: true }).then((clientList) => {
+      for (const client of clientList) {
+        if (client.url.includes(self.location.origin) && "focus" in client) {
+          client.focus();
+          if (event.notification.data?.noteId) {
+            client.navigate(`${urlToOpen}?note=${event.notification.data.noteId}`);
+          }
+          return;
+        }
+      }
+      if (self.clients.openWindow) {
+        return self.clients.openWindow(urlToOpen);
+      }
+    })
+  );
+});
+
+// Handle messages from main thread for showing local notifications
+self.addEventListener("message", (event) => {
+  if (event.data === "skipWaiting") {
+    self.skipWaiting();
+  }
+  
+  if (event.data && event.data.type === "SHOW_NOTIFICATION") {
+    const { title, body, tag, data } = event.data.payload;
+    
+    self.registration.showNotification(title, {
+      body,
+      icon: "/icons/icon-192x192.png",
+      badge: "/icons/icon-72x72.png",
+      tag,
+      data,
+      requireInteraction: true,
+    });
+  }
+});

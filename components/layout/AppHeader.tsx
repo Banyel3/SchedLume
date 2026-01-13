@@ -16,7 +16,7 @@ export function AppHeader({
   rightAction,
 }: AppHeaderProps) {
   return (
-    <header className="sticky top-0 bg-white/90 backdrop-blur-lg border-b border-surface-200/80 z-30">
+    <header className="sticky top-4 sm:top-6 mx-4 bg-white/90 backdrop-blur-lg border-b border-surface-200/80 z-30 rounded-2xl">
       <div className="flex items-center justify-between px-6 sm:px-8 h-14 w-full">
         <div className="flex items-center gap-3 min-w-0 flex-1">
           {showBackButton && (
